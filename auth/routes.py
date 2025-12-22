@@ -34,7 +34,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
 
-    return {"message": "User registered successfully", "user_id": new_user.id}
+    return {"message": "User registered successfully", "user_id": new_user.id, "full_name":new_user.full_name, "email":new_user.email}
 @router.post("/login")
 def login(user: UserLogin, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.email == user.email).first()
@@ -50,5 +50,7 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     return {
         "access_token": token,
         "token_type": "bearer",
-        "user_id": db_user.id
+        "user_id": db_user.id,
+        "full_name":db_user.full_name,
+        "email":db_user.email
     }
